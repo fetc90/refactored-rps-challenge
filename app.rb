@@ -1,6 +1,8 @@
 require 'sinatra/base'
 
 class RPS < Sinatra::Base
+  enable :sessions
+
   get '/' do
     erb :index
   end
@@ -12,6 +14,8 @@ class RPS < Sinatra::Base
   end
 
   get '/play' do
+    # creating attr to use in play.erb
+    @name = session[:name]
     erb :play
   end
 
