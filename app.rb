@@ -8,13 +8,12 @@ class RPS < Sinatra::Base
   end
 
   post '/name' do
-    # saving name to session so we can retreive it later
-    session[:name] = params[:name]
+    session[:player_name] = params[:name]
     redirect '/play'
   end
 
   get '/play' do
-    # creating attr to use in play.erb
+    @turn = Turn.new(session)
     @name = session[:name]
     @shape = session[:shape]
     @opponent_shape = session[:opponent_shape]
@@ -22,11 +21,11 @@ class RPS < Sinatra::Base
   end
 
   post '/play' do
-    session[:shape] = params[:shape]
-    session[:opponent_shape] = :rock
+    session[:player_shape] = params[:shape]
+    session[:opponent_shape] = Opponent.new.shape
     redirect '/play'
   end
 
   # start the server if ruby file executed directly
-  #run! if app_file == $0
+  run! if app_file == $0
 end
