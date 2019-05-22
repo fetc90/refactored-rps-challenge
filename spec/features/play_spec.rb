@@ -5,24 +5,55 @@ require 'spec_helper'
 # I would like to be able to play rock/paper/scissors
 
 feature 'playing a game' do
+
   before do
     visit '/'
     fill_in 'name', with: 'Dave'
-    click_button 'Submit'  
+    click_button 'Submit'
   end
+
   # As a marketeer
   # So I can play a game
   # I want to see the shapes I can play
 
 scenario 'see the shape options' do
-    expect(page).to have_content 'Rock'
-    expect(page).to have_content 'Paper'
-    expect(page).to have_content 'Scissors'
+    expect(page).to have_button 'Rock'
+    expect(page).to have_button 'Paper'
+    expect(page).to have_button 'Scissors'
   end
+
+  # As a marketeer
+  # So I can play a game
+  # I want to choose a shape to play
+
+  scenario 'choose a shape' do
+    click_button 'Rock'
+    expect(page).to have_content 'You chose Rock!'
+  end
+
+    # As a marketeer
+    # So I can play a game
+    # I want the game to choose an option
+
+    scenario 'game chooses "Rock"' do
+      click_button 'Rock'
+
+      message = find(:css, "#opponent").text.strip
+
+      expect(possible_messages).to include message
+    end
+
+    def possible_messages
+      [:rock, :paper, :scissors].map { |shape| "Opponent chose #{shape.to_s.capitalize}!"}
+    end
+
 end
 
 
-# - the marketeer should be able to enter their name before the game
+
+
+
+
 # - the marketeer should be able to enter their name before the game
 # - the marketeer will be presented the choices (rock, paper and scissors)
 # - the marketeer can choose one option
